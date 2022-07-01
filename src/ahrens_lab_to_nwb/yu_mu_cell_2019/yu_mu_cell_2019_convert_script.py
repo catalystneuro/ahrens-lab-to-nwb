@@ -11,10 +11,7 @@ nwbfile_path = example_path / f"{example_session_id}.nwb"
 metadata_path = Path(__file__) / "yu_mu_cell_2019_metadata.yaml"
 
 source_data = dict(
-    Recording=dict(),
-    LFP=dict(),
-    Sorting=dict(),
-    Behavior=dict(),
+    Segmentation=dict(),
 )
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
