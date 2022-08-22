@@ -2,27 +2,18 @@
 from pathlib import Path
 from typing import Optional, Tuple
 
+import h5py
 import numpy as np
 from roiextractors.imagingextractor import ImagingExtractor
 from roiextractors.extraction_tools import PathType
 from lazy_ops import DatasetView
 
 
-try:
-    import h5py
-
-    HAVE_H5PY = True
-except ImportError:
-    HAVE_H5PY = False
-
-
 class AhrensHdf5ImagingExtractor(ImagingExtractor):
     """Custom extractor for reading a single frame file from the Ahrens lab volumentric imaging data."""
 
     extractor_name = "AhrensHdf5Imaging"
-    installed = HAVE_H5PY
     mode = "file"
-    installation_mesg = "To use the Hdf5 Extractor run:\n\n pip install h5py\n\n"
 
     def __init__(self, file_path: PathType, sampling_frequency: float):
         ImagingExtractor.__init__(self)
