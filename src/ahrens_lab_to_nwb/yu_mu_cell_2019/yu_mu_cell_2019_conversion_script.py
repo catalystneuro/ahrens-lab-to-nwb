@@ -22,7 +22,7 @@ metadata_path = Path(__file__) / "yu_mu_cell_2019_metadata.yaml"
 source_data = dict(
     Imaging=dict(folder_path=str(imaging_folder_path), sampling_frequency=1.56),
 )
-conversion_options = dict(Imaging=dict(stub_test=True, stub_frames=5))
+conversion_options = dict(Imaging=dict(stub_test=True, stub_frames=3))
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
 
