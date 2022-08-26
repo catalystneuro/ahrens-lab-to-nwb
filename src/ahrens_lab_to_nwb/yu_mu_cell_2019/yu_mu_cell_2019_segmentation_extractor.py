@@ -34,31 +34,29 @@ class YuMu2019SegmentationExtractor(SegmentationExtractor):
 
     def __del__(self):
         self._file.close()
-        super().__del__()
 
     def close(self):
         self._file.close()
 
-    def get_image_size():
+    def get_image_size(self):
         return (2048, 2048, 29)
 
+    def get_roi_locations(self, roi_ids: Optional[ArrayLike] = None) -> np.ndarray:
+        roi_ids = roi_ids or range(self.get_num_rois())
+
+        roi_locations = np.empty(shape=(3, len(roi_ids)))
+        pixel_masks = self.get_roi_pixel_masks(roi_ids=roi_ids)
+        for idx, _ in enumerate(roi_ids):
+            roi_locations[:, idx] = np.array(
+                [
+                    np.median(pixel_masks[idx][:, 0]),
+                    np.median(pixel_masks[idx][:, 1]),
+                    np.median(pixel_masks[idx][:, 2]),
+                ]
+            )
+        return roi_locations
+
     def get_roi_pixel_masks(self, roi_ids: Optional[ArrayLike] = None) -> List[np.ndarray]:
-        """
-        Returns the weights applied to each of the pixels of the mask.
-
-        Parameters
-        ----------
-        roi_ids: array_like
-            A list or 1D array of ids of the ROIs. Length is the number of ROIs
-            requested.
-
-        Returns
-        -------
-        pixel_masks: list of numpy arrays
-            List of length number of rois, each element is an array with shape (number_of_non_zero_pixels, 3).
-            Columns 1 and 2 are the x and y coordinates of the pixel, while the third column represents the weight of
-            the pixel.
-        """
         pixel_masks = list()
         roi_ids = roi_ids or range(self.get_num_rois())
         dtype = self._file["x"].dtype
@@ -67,11 +65,12 @@ class YuMu2019SegmentationExtractor(SegmentationExtractor):
         # ...approximately 120MB total, so fine to load all into memory.
         # Actual sparse usage will be much smaller than that, too.
         for roi in roi_ids:
-            num_pixels = np.where(self._file["x"][:, roi] == 0)[0][0]
+            zero_idxs = np.where(self._file["x"][:, roi] == 0)
+            num_pixels = zero_idxs[0][0] if np.any(zero_idxs) else self._file["x"].shape[0]
             pixel_mask = np.empty(shape=(num_pixels, 4), dtype=dtype)
-            pixel_mask[:, 0] = self._file["x"][: num_pixels - 1, roi]
-            pixel_mask[:, 1] = self._file["y"][: num_pixels - 1, roi]
-            pixel_mask[:, 2] = self._file["z"][: num_pixels - 1, roi]
+            pixel_mask[:, 0] = self._file["x"][:num_pixels, roi]
+            pixel_mask[:, 1] = self._file["y"][:num_pixels, roi]
+            pixel_mask[:, 2] = self._file["z"][:num_pixels, roi]
             pixel_mask[:, 3] = 1
             pixel_masks.append(pixel_mask)
         return pixel_masks

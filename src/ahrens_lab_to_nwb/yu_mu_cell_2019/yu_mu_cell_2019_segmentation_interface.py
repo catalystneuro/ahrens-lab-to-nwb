@@ -8,6 +8,8 @@ from .yu_mu_cell_2019_segmentation_extractor import YuMu2019SegmentationExtracto
 class YuMu2019SegmentationInterface(BaseSegmentationExtractorInterface):
     """Data Interface for YuMu2019SegmentationExtractor."""
 
+    Extractor = YuMu2019SegmentationExtractor
+
     def __init__(self, file_path: FilePathType, sampling_frequency: float, verbose: bool = True):
         self.source_data = dict(file_path=file_path, sampling_frequency=sampling_frequency, verbose=verbose)
         self.verbose = verbose
