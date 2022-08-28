@@ -28,7 +28,7 @@ source_data = dict(
     #    NeuronSegmentation=dict(file_path=str(neuron_segmentation_file_path), sampling_frequency=1.56),
 )
 conversion_options = dict(
-    Imaging=dict(stub_test=True, stub_frames=3), GliaSegmentation=dict(include_roi_centroids=False, mask_type="None")
+    Imaging=dict(stub_test=True, stub_frames=3), GliaSegmentation=dict(include_roi_centroids=False, mask_type="voxel")
 )
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
