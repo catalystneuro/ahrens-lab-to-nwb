@@ -22,7 +22,7 @@ pip install -e .
 ```
 
 Note:
-both of the methods above install the repository in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs) 
+both of the methods above install the repository in [editable mode](https://pip.pypa.io/en/stable/cli/pip_install/#editable-installs)
 
 ## Repository structure
 Each conversion is organized in a directory of its own in the `src` directory:
@@ -64,7 +64,7 @@ The directory might contain other files that are necessary for the conversion bu
 ## Running a specific conversion
 To run a specific conversion, you might need to install first some conversion specific dependencies that are located in each conversion directory:
 ```
-pip install -r src/ahrens_lab_to_nwb/yu_mu_cell_2019/yu_mu_cell_2019_requirements.txt 
+pip install -r src/ahrens_lab_to_nwb/yu_mu_cell_2019/yu_mu_cell_2019_requirements.txt
 ```
 
 You can run a specific conversion with the following command:
