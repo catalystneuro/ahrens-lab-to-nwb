@@ -13,6 +13,8 @@ from .yu_mu_cell_2019_imaging_extractor import AhrensHdf5ImagingExtractor
 class AhrensHdf5ImagingInterface(BaseImagingExtractorInterface):
     """Data Interface for AhrensHdf5ImagingExtractor."""
 
+    Extractor = AhrensHdf5ImagingExtractor
+
     def __init__(self, folder_path: FolderPathType, sampling_frequency: float, verbose: bool = True):
         self.source_data = dict(folder_path=folder_path, sampling_frequency=sampling_frequency, verbose=verbose)
         self.verbose = verbose

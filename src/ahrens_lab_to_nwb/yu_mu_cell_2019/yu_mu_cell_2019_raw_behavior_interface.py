@@ -26,7 +26,7 @@ class YuMu2019RawBehaviorInterface(BaseDataInterface):
         )
         self.verbose = verbose
 
-    def run_conversion(self, nwbfile: NWBFile):
+    def run_conversion(self, nwbfile: NWBFile, metadata: Optional[dict] = None):
         signals_names_and_descriptions = load_dict_from_file(file_path=self.source_data["metadata_file_path"])
         timing_info = dict(
             starting_time=0.0,  # All time references in NWBFile relative to behavior
@@ -34,7 +34,7 @@ class YuMu2019RawBehaviorInterface(BaseDataInterface):
             unit="a.u.",  # These could technically have some scale of 'voltage' unit but exact is unknown
         )
 
-        with h5py.File(name=self.source_data["file_path"]) as source_file:
+        with h5py.File(name=self.source_data["data_file_path"]) as source_file:
             all_series_lengths = source_file["rawdata"]["ch1"].shape[1]
 
             for series in signals_names_and_descriptions:

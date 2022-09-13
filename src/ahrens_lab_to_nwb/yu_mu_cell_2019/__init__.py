@@ -1,4 +1,3 @@
-from .yu_mu_cell_2019_nwbconverter import YuMuCell2019NWBConverter
 from .yu_mu_cell_2019_imaging_extractor import AhrensHdf5ImagingExtractor
 from .yu_mu_cell_2019_imaging_interface import AhrensHdf5ImagingInterface
 from .yu_mu_cell_2019_raw_behavior_interface import YuMu2019RawBehaviorInterface
