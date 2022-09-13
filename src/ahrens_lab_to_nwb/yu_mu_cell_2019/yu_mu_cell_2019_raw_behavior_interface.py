@@ -39,11 +39,11 @@ class YuMu2019RawBehaviorInterface(BaseDataInterface):
 
             for series in signals_names_and_descriptions:
                 if isinstance(series["matlab_key"], list):
-                    series_data = np.empty(shape=(len(series["matlab_key"]), all_series_lengths))
+                    series_data = np.empty(shape=(all_series_lengths, len(series["matlab_key"])))
                     for idx, key in enumerate(series["matlab_key"]):
-                        series_data[idx, :] = source_file["rawdata"][key][:]
+                        series_data[:, idx] = source_file["rawdata"][key][0, :]
                 else:
-                    series_data = source_file["rawdata"][series["matlab_key"]][:]
+                    series_data = source_file["rawdata"][series["matlab_key"]][0, :]
                 nwbfile.add_acquisition(
                     TimeSeries(
                         name=series["series_name"],
