@@ -22,6 +22,7 @@ ephys_folder_path = Path(
 )
 raw_behavior_file_path = ephys_folder_path / "rawdata.mat"
 raw_behavior_series_descriptions = Path(__file__) / "yu_mu_cell_2019_behavior_descriptions.yaml"
+processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
@@ -46,7 +47,10 @@ source_data = dict(
         metadata_file_path=raw_behavior_series_descriptions,
         sampling_frequency=behavior_rate,
     ),
+    ProcessedBehavior=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
     Trials=dict(file_path=trial_table_file_path, sampling_frequency=behavior_rate),
+    SwimIntervals=dict(file_path=processed_behavior_file_path, sampling_frequency=behavior_rate),
+    ActivityStates=dict(folder_path=states_folder_path),
 )
 conversion_options = dict(Imaging=dict(stub_test=True, stub_frames=3))
 

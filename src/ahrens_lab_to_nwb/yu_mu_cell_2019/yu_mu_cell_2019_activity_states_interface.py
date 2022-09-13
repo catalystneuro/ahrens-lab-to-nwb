@@ -7,7 +7,7 @@ from neuroconv.tools.nwb_helpers import get_module
 from neuroconv.utils import FolderPathType
 
 
-class YuMu2019StatesIntervalsInterface(BaseDataInterface):
+class YuMu2019ActivityStatesInterface(BaseDataInterface):
     """Custom interface for handling processed behavior data for Yu Mu 2019 Cell paper."""
 
     def __init__(self, folder_path: FolderPathType, verbose: bool = True):

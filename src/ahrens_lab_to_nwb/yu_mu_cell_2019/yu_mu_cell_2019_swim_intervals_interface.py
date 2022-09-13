@@ -1,25 +1,57 @@
 """Custom interface for handling processed behavior data for Yu Mu 2019 Cell paper."""
 import h5py
-import numpy as np
-from pynwb import NWBFile, TimeSeries, H5DataIO
+from pynwb import NWBFile, H5DataIO
+from pynwb.epoch import TimeIntervals
 from neuroconv.basedatainterface import BaseDataInterface
 from neuroconv.tools.nwb_helpers import get_module
-from neuroconv.utils import FolderPathType
+from neuroconv.utils import FilePathType
+from ndx_events import AnnotatedEventsTable
 
 
 class YuMu2019SwimIntervalsInterface(BaseDataInterface):
     """Custom interface for handling processed behavior data for Yu Mu 2019 Cell paper."""
 
-    def __init__(self, folder_path: FolderPathType, verbose: bool = True):
-        self.source_data = dict(folder_path=folder_path, verbose=verbose)
+    def __init__(self, file_path: FilePathType, sampling_frequency: float, verbose: bool = True):
+        self.source_data = dict(file_path=file_path, sampling_frequency=sampling_frequency, verbose=verbose)
         self.verbose = verbose
 
     def run_conversion(self, nwbfile: NWBFile):
         behavior_module = get_module(nwbfile=nwbfile, name="behavior", description="TODO")
 
         with h5py.File(name=self.source_data["file_path"]) as source_file:
-            pass
-            # get swim start/stop from swimStart/EndIndT / sampling rate
-            # attach custom columns for swim width and power (units unknown?)
 
-            # Attach bursts as separate timed events
+            # Swimming intervals
+            swim_starts = source_file["data"]["swimStartIndT"][:] / self.source_data["sampling_frequency"]
+            swim_stops = source_file["data"]["swimEndIndT"][:] / self.source_data["sampling_frequency"]
+
+            time_intervals = TimeIntervals(
+                name="SwimIntervals", description="Intervals of time when subject is estimated to be swimming."
+            )
+            for start_time, stop_time in zip(swim_starts, swim_stops):
+                time_intervals.add_interval(start_time=start_time, stop_time=stop_time)
+
+            # TODO: units for these two
+            time_intervals.add_column(
+                name="power",
+                description="Estimated power of the swim event.",
+                data=H5DataIO(source_file["data"]["swimPower__"], compression="gzip"),
+            )
+            time_intervals.add_column(
+                name="width",
+                descriptio="Estimated width spanned by the swim event.",
+                data=H5DataIO(source_file["data"]["swimWidth"], compression="gzip"),
+            )
+
+            behavior_module.add(time_intervals)
+
+            # Burst events
+            bursts = source_file["data"]["burstBothIndT"][:] / self.source_data["sampling_frequency"]
+            annotated_events = AnnotatedEventsTable(
+                name="BurstEvents", description="Events of classified bursting activity."
+            )
+            annotated_events.add_event_type(
+                label="bursts",
+                event_description="Burst events.",
+                event_times=H5DataIO(bursts, compression="gzip"),
+            )
+            behavior_module.add(annotated_events)
