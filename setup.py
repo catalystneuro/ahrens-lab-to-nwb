@@ -12,7 +12,7 @@ with open("README.md", "r") as f:
 setup(
     name="ahrens-lab-to-nwb",
     version="0.0.1",
-    description="NWB conversion scripts, functions, and classes for an arbitrary conversion repo_name.",
+    description="NWB conversion scripts, functions, and classes for an the Ahrens lab.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="CatalystNeuro",
