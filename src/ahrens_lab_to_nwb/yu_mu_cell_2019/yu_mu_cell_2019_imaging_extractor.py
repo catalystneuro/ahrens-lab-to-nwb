@@ -13,9 +13,7 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
     """Custom extractor for reading a single frame file from the Ahrens lab volumentric imaging data."""
 
     extractor_name = "AhrensHdf5Imaging"
-    installed = HAVE_H5PY
     mode = "file"
-    installation_mesg = "To use the Hdf5 Extractor run:\n\n pip install h5py\n\n"
 
     def __init__(self, file_path: PathType, sampling_frequency: float):
         ImagingExtractor.__init__(self)

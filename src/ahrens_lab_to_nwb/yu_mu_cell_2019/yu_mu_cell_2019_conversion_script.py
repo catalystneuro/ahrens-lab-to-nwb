@@ -17,6 +17,9 @@ imaging_folder_path = Path(
     "E:/Ahrens/Imaging/20170228/fish4/20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002/raw"
 )
 
+glia_segmentation_file_path = Path("E:/Ahrens/Segmentation/cells0_adjusted.mat")
+neuron_segmentation_file_path = Path("E:/Ahrens/Segmentation/cells1_adjusted.mat")
+
 ephys_folder_path = Path(
     "E:/Ahrens/Imaging/20170228/fish4/20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002/ephys"
 )
@@ -42,6 +45,8 @@ imaging_rate = 1.56
 behavior_rate = 2431.6
 source_data = dict(
     Imaging=dict(folder_path=str(imaging_folder_path), sampling_frequency=imaging_rate),
+    GliaSegmentation=dict(file_path=str(glia_segmentation_file_path), sampling_frequency=imaging_rate),
+    NeuronSegmentation=dict(file_path=str(neuron_segmentation_file_path), sampling_frequency=imaging_rate),
     RawBehavior=dict(
         data_file_path=str(raw_behavior_file_path),
         metadata_file_path=str(raw_behavior_series_description_file_path),
@@ -52,7 +57,9 @@ source_data = dict(
     SwimIntervals=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
     ActivityStates=dict(folder_path=str(states_folder_path), sampling_frequency=behavior_rate),
 )
-conversion_options = dict(Imaging=dict(stub_test=True, stub_frames=2))
+conversion_options = dict(
+    Imaging=dict(stub_test=True, stub_frames=3), GliaSegmentation=dict(include_roi_centroids=False, mask_type="voxel")
+)
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
 
