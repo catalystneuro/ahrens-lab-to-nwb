@@ -1,0 +1,37 @@
+# All keys are fields of the 'rawdata' struct
+- matlab_key: ch3
+  series_name: FrameCaptureTTLSignal
+  series_description: >
+    Raw synchronization signal detecting shutter activation for the optical physiology camera.
+    Forms the basis of the timestamps for the TwoPhotonSeries and corresponding Fluorescence.
+    Values of the TTL signal significantly above 3.5 indicate start of volume scan;
+    values significantly close to 3.5 indicate the scan of a single plane.
+- matlab_key:
+    - ch1
+    - ch2
+  series_name: SwimSignals
+  series_description: >
+    Raw ephys signals from electrodes attached to the tail of the paralyzed subject.
+    Tracks 'effective' motor output of subject for use in virtual reality environment.
+    This is later classified to define the state intervals (Active vs. Passive)
+    and trials (closed-loop or open-loop)
+- matlab_key: stimVelTotal
+  series_name: TotalStimulusVelocitySignal
+  series_description: Raw signal calculating (drift speed - motosensory gain) x swim power.
+- matlab_key: stimVelNull
+  series_name: BaselineStimulusVelocitySignal
+  series_description: Raw signal for drift speed of visual grating presented to the subject.
+- matlab_key: stimGain
+  series_name: StimulusGainSignal
+  series_description: Raw signal tracking the gain of the visual stimulus.
+- matlab_key: stimID
+  series_name: StimulusTypeSignal
+  series_description: >
+    Raw signal tracking the type of the presented visual stimulus. Most of the time this will likely just be a binary
+    signal for tracking the on/off status.
+- matlab_key:
+    - stimParam3
+    - stimParam4
+    - stimParam5
+  series_name: StimulusParameterSignals
+  series_description: A collection of raw stimulus parameter signals.

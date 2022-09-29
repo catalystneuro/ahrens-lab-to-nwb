@@ -1,8 +1,15 @@
 """Primary NWBConverter class for this dataset."""
 from neuroconv import NWBConverter
 
-from .yu_mu_cell_2019_imaging_interface import AhrensHdf5ImagingInterface
-from .yu_mu_cell_2019_segmentation_interface import YuMu2019SegmentationInterface
+from . import (
+    AhrensHdf5ImagingInterface,
+    YuMu2019SegmentationInterface,
+    YuMu2019RawBehaviorInterface,
+    YuMu2019ProcessedBehaviorInterface,
+    YuMu2019TrialsInterface,
+    YuMu2019SwimIntervalsInterface,
+    YuMu2019ActivityStatesInterface,
+)
 
 
 class YuMuCell2019NWBConverter(NWBConverter):
@@ -12,4 +19,9 @@ class YuMuCell2019NWBConverter(NWBConverter):
         Imaging=AhrensHdf5ImagingInterface,
         GliaSegmentation=YuMu2019SegmentationInterface,
         NeuronSegmentation=YuMu2019SegmentationInterface,
+        RawBehavior=YuMu2019RawBehaviorInterface,
+        ProcessedBehavior=YuMu2019ProcessedBehaviorInterface,
+        Trials=YuMu2019TrialsInterface,
+        SwimIntervals=YuMu2019SwimIntervalsInterface,
+        ActivityStates=YuMu2019ActivityStatesInterface,
     )
