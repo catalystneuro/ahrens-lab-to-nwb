@@ -27,7 +27,7 @@ class YuMu2019ActivityStatesInterface(BaseDataInterface):
                 group_name = f"{state_name}State"
                 file_path = Path(self.source_data["folder_path"]) / f"{channel_name}{group_name}.mat"
 
-                source_file = loadmat(file_name=str(file_path))
+                source_file = loadmat(file_name=str(file_path), variable_names=['start', 'end'])
                 table_dict["start_time"].extend(
                     source_file[group_name]["start"][0][0][0] / self.source_data["sampling_frequency"]
                 )
