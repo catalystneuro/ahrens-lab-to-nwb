@@ -27,7 +27,7 @@ class YuMu2019ActivityStatesInterface(BaseDataInterface):
                 group_name = f"{state_name}State"
                 file_path = Path(self.source_data["folder_path"]) / f"{channel_name}{group_name}.mat"
 
-                source_file = loadmat(file_name=str(file_path), variable_names=["start", "end"])
+                source_file = loadmat(file_name=str(file_path))
                 table_dict["start_time"].extend(
                     source_file[group_name]["start"][0][0][0] / self.source_data["sampling_frequency"]
                 )
@@ -43,6 +43,6 @@ class YuMu2019ActivityStatesInterface(BaseDataInterface):
             name="ActivityStates", description="Classified periods of activity (passive, active, or transient)."
         )
         time_intervals.add_column(name="state_type", description="The type of classified state.")
-        for _, start_time, stop_time, state_type in table_dataframe.itertuples():
+        for start_time, stop_time, state_type in table_dataframe.itertuples(index=False):
             time_intervals.add_interval(start_time=start_time, stop_time=stop_time, state_type=state_type)
         behavior_module.add(time_intervals)
