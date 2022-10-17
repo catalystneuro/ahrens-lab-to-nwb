@@ -1,2 +1,1 @@
-neuroconv  # TODO: pin
 ndx-events==0.2.0

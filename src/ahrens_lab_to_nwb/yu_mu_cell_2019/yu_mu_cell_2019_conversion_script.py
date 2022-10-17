@@ -44,9 +44,9 @@ session_start_time = session_start_time.replace(tzinfo=tz.gettz(timezone))
 imaging_rate = 1.56
 behavior_rate = 2431.6
 source_data = dict(
-    Imaging=dict(folder_path=str(imaging_folder_path), sampling_frequency=imaging_rate),
-    GliaSegmentation=dict(file_path=str(glia_segmentation_file_path), sampling_frequency=imaging_rate),
-    NeuronSegmentation=dict(file_path=str(neuron_segmentation_file_path), sampling_frequency=imaging_rate),
+    # Imaging=dict(folder_path=str(imaging_folder_path), sampling_frequency=imaging_rate),
+    # GliaSegmentation=dict(file_path=str(glia_segmentation_file_path), sampling_frequency=imaging_rate),
+    # NeuronSegmentation=dict(file_path=str(neuron_segmentation_file_path), sampling_frequency=imaging_rate),
     RawBehavior=dict(
         data_file_path=str(raw_behavior_file_path),
         metadata_file_path=str(raw_behavior_series_description_file_path),
