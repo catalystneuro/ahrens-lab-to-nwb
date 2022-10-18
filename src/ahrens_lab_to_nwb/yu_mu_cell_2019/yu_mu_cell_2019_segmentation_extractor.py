@@ -29,8 +29,7 @@ class YuMu2019SegmentationExtractor(SegmentationExtractor):
         )
 
         self._roi_response_raw = self._file["baseline"]
-        self._roi_response_dff = self._file["timeseries"]  # TODO: Notes describe this as 'detrended'
-        self._image_masks = 1
+        self._roi_response_dff = self._file["timeseries"]
 
     def __del__(self):
         self._file.close()
