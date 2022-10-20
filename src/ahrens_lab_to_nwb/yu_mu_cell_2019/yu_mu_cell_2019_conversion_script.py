@@ -3,12 +3,19 @@ from pathlib import Path
 from datetime import datetime
 from dateutil import tz
 
+import numpy as np
+import h5py
+
 # from neuroconv.utils import load_dict_from_file, dict_deep_update
 
 from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuCell2019NWBConverter
 
+
 # Manually specify everything here as it changes
 # ----------------------------------------------
+stub_test = True  # True for a fast prototype file, False for converting the entire session
+stub_frames = 4  # Length of stub file, if stub_test=True
+
 timezone = "US/Eastern"
 session_name = "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002"
 
@@ -27,9 +34,10 @@ processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path("E:/Ahrens/NWB/testing.nwb")
+nwbfile_path = Path("E:/Ahrens/NWB/testing_imaging+glia.nwb")
 # ----------------------------------------------
 # Below here is automated
+
 
 example_session_id = imaging_folder_path.parent.stem
 session_start_time_string = "".join(example_session_id.split("_")[-2:])
@@ -41,9 +49,9 @@ session_start_time = session_start_time.replace(tzinfo=tz.gettz(timezone))
 imaging_rate = 1.56
 behavior_rate = 2431.6
 source_data = dict(
-    # Imaging=dict(folder_path=str(imaging_folder_path), sampling_frequency=imaging_rate),
-    # GliaSegmentation=dict(file_path=str(glia_segmentation_file_path), sampling_frequency=imaging_rate),
-    NeuronSegmentation=dict(file_path=str(neuron_segmentation_file_path), sampling_frequency=imaging_rate),
+    Imaging=dict(folder_path=str(imaging_folder_path), sampling_frequency=imaging_rate),
+    # NeuronSegmentation=dict(file_path=str(neuron_segmentation_file_path), sampling_frequency=imaging_rate),
+    GliaSegmentation=dict(file_path=str(glia_segmentation_file_path), sampling_frequency=imaging_rate),
     # RawBehavior=dict(
     #     data_file_path=str(raw_behavior_file_path),
     #     metadata_file_path=str(raw_behavior_series_description_file_path),
@@ -55,12 +63,29 @@ source_data = dict(
     # ActivityStates=dict(folder_path=str(states_folder_path), sampling_frequency=behavior_rate),
 )
 conversion_options = dict(
-    Imaging=dict(stub_test=True, stub_frames=3),
-    GliaSegmentation=dict(include_roi_centroids=False, mask_type="voxel"),
-    NeuronSegmentation=dict(include_roi_centroids=False, mask_type="voxel"),
+    Imaging=dict(stub_test=stub_test, stub_frames=stub_frames),
+    GliaSegmentation=dict(include_roi_centroids=False, mask_type="voxel", stub_test=stub_test, stub_frames=stub_frames),
+    NeuronSegmentation=dict(
+        include_roi_centroids=False, mask_type="voxel", stub_test=stub_test, stub_frames=stub_frames
+    ),
 )
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
+
+# Add synchronized timestamps to all imaging and segmentation objects
+with h5py.File(name=processed_behavior_file_path) as file:
+    frame_tracker = file["data"]["frame"][:]
+timestamps = np.where(np.diff(frame_tracker))[1][:-1] / behavior_rate
+
+# only for corrupted session
+imaging_len = converter.data_interface_objects["Imaging"].imaging_extractor.get_num_frames()
+
+if "Imaging" in converter.data_interface_objects:
+    converter.data_interface_objects["Imaging"].imaging_extractor.set_times(times=timestamps[:imaging_len])
+if "NeuronSegmentation" in converter.data_interface_objects:
+    converter.data_interface_objects["NeuronSegmentation"].segmentation_extractor.set_times(times=timestamps)
+if "GliaSegmentation" in converter.data_interface_objects:
+    converter.data_interface_objects["GliaSegmentation"].segmentation_extractor.set_times(times=timestamps)
 
 metadata = converter.get_metadata()
 metadata["NWBFile"].update(session_start_time=session_start_time)
