@@ -68,9 +68,7 @@ source_data = dict(
 )
 conversion_options = dict(
     Imaging=dict(stub_test=stub_test, stub_frames=stub_frames),
-    NeuronSegmentation=dict(
-        include_roi_centroids=False, mask_type="voxel", stub_test=stub_test, stub_frames=stub_frames
-    ),
+    Segmentation=dict(include_roi_centroids=False, mask_type="voxel", stub_test=stub_test, stub_frames=stub_frames),
 )
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
