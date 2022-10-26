@@ -93,6 +93,7 @@ metadata["NWBFile"].update(session_start_time=session_start_time)
 metadata_from_yaml = load_dict_from_file(file_path=global_metadata_path)
 
 # Automatically remove excess metadata from dual-color form
+cell_type_id_to_pop = 1 if cell_type_id == 0 else 0
 metadata_from_yaml["Ophys"]["Fluorescence"]["roi_response_series"].pop(cell_type_id)
 metadata_from_yaml["Ophys"]["DfOverF"]["roi_response_series"].pop(cell_type_id)
 metadata_from_yaml["Ophys"]["ImageSegmentation"]["plane_segmentations"].pop(cell_type_id)

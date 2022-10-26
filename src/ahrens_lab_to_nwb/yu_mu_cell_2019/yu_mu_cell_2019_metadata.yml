@@ -55,6 +55,7 @@ Ophys:
           emission_lambda: 525-550 nm
     - name: GliaVolumeSegmentation
       description: Whole-brain optical imaging for the glial filter.
+      device: Microscope
       indicator: GCaMP6f
       # Some single-color glia subjects used the jRGECO1b indicator
       # For jRGECO1b indicator single-color, excitation is 561 nm
