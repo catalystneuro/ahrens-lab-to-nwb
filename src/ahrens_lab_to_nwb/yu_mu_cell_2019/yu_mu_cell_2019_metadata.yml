@@ -46,13 +46,14 @@ Ophys:
       description: Whole-brain optical imaging for the neuron filter.
       device: Microscope
       indicator: GCaMP6f
-      excitation_lambda: 488 nm
+      excitation_lambda: 488
       location: whole-brain
-      reference_frame: top-down
+      reference_frame: dorsal
       optical_channel:
         - name: NeuronOpticalChannel
           description: Detection filter (Semrock).
-          emission_lambda: 525-550 nm
+          emission_lambda: 537.5
+          # Really this is 525-550 nm, but required by schema to be a 'number', so returning midpoint
     - name: GliaVolumeSegmentation
       description: Whole-brain optical imaging for the glial filter.
       device: Microscope
@@ -60,11 +61,11 @@ Ophys:
       # Some single-color glia subjects used the jRGECO1b indicator
       # For jRGECO1b indicator single-color, excitation is 561 nm
       # with a 630-692 nm filter
-      excitation_lambda: 561 nm
+      excitation_lambda: 561
       location: whole-brain
-      reference_frame: top-down
+      reference_frame: dorsal
       optical_channel:
         - name: GliaOpticalChannel
           description: Detection filter (Semrock).
           # For dual-color, 645-675 nm (Chroma) filter
-          emission_lambda: 525-550 nm
+          emission_lambda: 537.5
