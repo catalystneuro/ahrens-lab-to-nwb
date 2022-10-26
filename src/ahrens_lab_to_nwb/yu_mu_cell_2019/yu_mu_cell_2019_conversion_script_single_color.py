@@ -54,7 +54,12 @@ session_start_time = session_start_time.replace(tzinfo=tz.gettz(timezone))
 imaging_rate = 1.56
 behavior_rate = 2431.6
 source_data = dict(
-    Imaging=dict(folder_path=str(imaging_folder_path), sampling_frequency=imaging_rate),
+    Imaging=dict(
+        folder_path=str(imaging_folder_path),
+        sampling_frequency=imaging_rate,
+        shape=[29, 888, 2048],
+        dtype="int16",
+    ),
     Segmentation=dict(file_path=str(segmentation_file_path), sampling_frequency=imaging_rate),
     RawBehavior=dict(
         data_file_path=str(raw_behavior_file_path),

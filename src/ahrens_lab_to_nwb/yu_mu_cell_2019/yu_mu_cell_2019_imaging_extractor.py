@@ -16,7 +16,12 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
     mode = "file"
 
     def __init__(
-        self, file_path: PathType, sampling_frequency: float, region: Optional[Literal["top", "bottom"]] = None
+        self,
+        file_path: PathType,
+        sampling_frequency: float,
+        region: Optional[Literal["top", "bottom"]] = None,
+        shape: Optional[Tuple[int]] = None,  # If specified, don't grab from file
+        dtype: Optional[np.dtype] = None,  # If specified, don't grab from file
     ):
         ImagingExtractor.__init__(self)
         self._kwargs = dict(file_path=str(Path(file_path).absolute()), sampling_frequency=sampling_frequency)
@@ -24,12 +29,16 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
         self.file_path = file_path
         self.region = region
 
-        with h5py.File(name=file_path) as file:
-            self._num_stacks, self._num_rows, self._num_cols = file["default"].shape
-            self._dtype = file["default"].dtype
+        if shape is None or dtype is None:
+            with h5py.File(name=file_path) as file:
+                self._num_stacks, self._num_rows, self._num_cols = file["default"].shape
+                self._dtype = file["default"].dtype
+        else:
+            self._num_stacks, self._num_rows, self._num_cols = shape
+            self._dtype = dtype
         self._frame_axis_order = [1, 2, 0]
 
-    def get_video(self, start_frame: Optional[int] = None, end_frame: Optional[int] = None) -> np.ndarray:  # noqa: D102
+    def get_video(self, start_frame: Optional[int] = None, end_frame: Optional[int] = None) -> np.ndarray:
         with h5py.File(name=self.file_path) as file:
             video = DatasetView(file["default"]).lazy_transpose(self._frame_axis_order)
 
