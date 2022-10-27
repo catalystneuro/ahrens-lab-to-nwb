@@ -61,16 +61,30 @@ source_data = dict(
         dtype="int16",
     ),
     Segmentation=dict(file_path=str(segmentation_file_path), sampling_frequency=imaging_rate),
-    RawBehavior=dict(
-        data_file_path=str(raw_behavior_file_path),
-        metadata_file_path=str(raw_behavior_series_description_file_path),
-        sampling_frequency=behavior_rate,
-    ),
-    ProcessedBehavior=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
-    Trials=dict(file_path=str(trial_table_file_path), sampling_frequency=behavior_rate),
-    SwimIntervals=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
     ActivityStates=dict(folder_path=str(states_folder_path), sampling_frequency=behavior_rate),
 )
+if raw_behavior_file_path.exists():
+    source_data.update(
+        RawBehavior=dict(
+            data_file_path=str(raw_behavior_file_path),
+            metadata_file_path=str(raw_behavior_series_description_file_path),
+            sampling_frequency=behavior_rate,
+        )
+    )
+if processed_behavior_file_path.exists():
+    source_data.update(
+        ProcessedBehavior=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
+    )
+if trial_table_file_path.exists():
+    source_data.update(
+        Trials=dict(file_path=str(trial_table_file_path), sampling_frequency=behavior_rate),
+    )
+if processed_behavior_file_path.exists():
+    source_data.update(
+        SwimIntervals=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
+    )
+
+
 conversion_options = dict(
     Imaging=dict(stub_test=stub_test, stub_frames=stub_frames),
     Segmentation=dict(include_roi_centroids=False, mask_type="voxel", stub_test=stub_test, stub_frames=stub_frames),
