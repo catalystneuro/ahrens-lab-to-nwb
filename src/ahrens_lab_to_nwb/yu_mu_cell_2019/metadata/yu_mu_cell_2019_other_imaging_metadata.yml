@@ -46,7 +46,7 @@ Ophys:
       - name: GliaVolumeSegmentation
         description: Segmented ROIs for the glia cells.
   ImagingPlane:
-    - name: NeuronVolumeSegmentation
+    - name: NeuronVolume
       description: Whole-brain optical imaging for the neuron filter.
       device: Microscope
       indicator: GCaMP6f

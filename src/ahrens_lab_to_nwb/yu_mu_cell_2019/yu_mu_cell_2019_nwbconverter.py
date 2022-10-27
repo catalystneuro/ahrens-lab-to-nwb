@@ -3,7 +3,8 @@ from neuroconv import NWBConverter
 
 from . import (
     AhrensHdf5ImagingInterface,
-    YuMu2019SegmentationInterface,
+    YuMu2019SingleColorSegmentationInterface,
+    # YuMu2019DualColorSegmentationInterface
     YuMu2019RawBehaviorInterface,
     YuMu2019ProcessedBehaviorInterface,
     YuMu2019TrialsInterface,
@@ -17,9 +18,8 @@ class YuMuCell2019NWBConverter(NWBConverter):
 
     data_interface_classes = dict(
         Imaging=AhrensHdf5ImagingInterface,
-        Segmentation=YuMu2019SegmentationInterface,  # For single-color runs, no need to distinguish
-        GliaSegmentation=YuMu2019SegmentationInterface,
-        NeuronSegmentation=YuMu2019SegmentationInterface,
+        SingleColorSegmentation=YuMu2019SingleColorSegmentationInterface,
+        # DUalColorSegmentation=YuMu2019DualColorSegmentationInterface,
         RawBehavior=YuMu2019RawBehaviorInterface,
         ProcessedBehavior=YuMu2019ProcessedBehaviorInterface,
         Trials=YuMu2019TrialsInterface,
