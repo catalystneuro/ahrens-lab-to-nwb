@@ -9,7 +9,7 @@ from neuroconv.datainterfaces.ophys.baseimagingextractorinterface import BaseIma
 from neuroconv.utils import FolderPathType
 
 
-from .yu_mu_cell_2019_imaging_extractor import AhrensHdf5ImagingExtractor
+from ..extractors.yu_mu_cell_2019_imaging_extractor import AhrensHdf5ImagingExtractor
 
 
 class AhrensHdf5ImagingInterface(BaseImagingExtractorInterface):

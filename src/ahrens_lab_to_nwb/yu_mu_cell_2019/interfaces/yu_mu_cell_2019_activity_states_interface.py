@@ -27,14 +27,15 @@ class YuMu2019ActivityStatesInterface(BaseDataInterface):
                 group_name = f"{state_name}State"
                 file_path = Path(self.source_data["folder_path"]) / f"{channel_name}{group_name}.mat"
 
-                source_file = loadmat(file_name=str(file_path))
-                table_dict["start_time"].extend(
-                    source_file[group_name]["start"][0][0][0] / self.source_data["sampling_frequency"]
-                )
-                table_dict["stop_time"].extend(
-                    source_file[group_name]["end"][0][0][0] / self.source_data["sampling_frequency"]
-                )
-                table_dict["state_type"].extend([state_name] * len(source_file[group_name]["start"][0][0][0]))
+                if file_path.exists():
+                    source_file = loadmat(file_name=str(file_path))
+                    table_dict["start_time"].extend(
+                        source_file[group_name]["start"][0][0][0] / self.source_data["sampling_frequency"]
+                    )
+                    table_dict["stop_time"].extend(
+                        source_file[group_name]["end"][0][0][0] / self.source_data["sampling_frequency"]
+                    )
+                    table_dict["state_type"].extend([state_name] * len(source_file[group_name]["start"][0][0][0]))
 
         table_dataframe = pd.DataFrame(data=table_dict)
         table_dataframe.sort_values(by=["start_time"])

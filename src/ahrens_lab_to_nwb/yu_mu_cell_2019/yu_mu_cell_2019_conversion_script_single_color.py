@@ -25,16 +25,16 @@ session_name_split = session_name.split("_")
 subject_number = session_name_split[1]
 session_start_date = session_name_split[-2]
 
-global_metadata_path = Path(__file__).parent / "yu_mu_cell_2019_metadata.yml"
+metadata_folder = Path(__file__).parent / "metadata"  # The pre-built one in the repository; can also use a local copy
+global_metadata_path = metadata_folder / "yu_mu_cell_2019_metadata.yml"
+raw_behavior_series_description_file_path = metadata_folder / "yu_mu_cell_2019_behavior_descriptions.yml"
 
 imaging_folder_path = Path(f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/raw")
-
 segmentation_file_path = Path(f"E:/Ahrens/Segmentation/{session_name}/Cells{cell_type_id}_clean.mat")
 
-
+# Some of these may not exist and that's OK (existence is checked before adding it to the conversion)
 ephys_folder_path = Path(f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/ephys")
 raw_behavior_file_path = ephys_folder_path / "rawdata.mat"
-raw_behavior_series_description_file_path = Path(__file__).parent / "yu_mu_cell_2019_behavior_descriptions.yml"
 processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
@@ -87,7 +87,13 @@ if processed_behavior_file_path.exists():
 
 conversion_options = dict(
     Imaging=dict(stub_test=stub_test, stub_frames=stub_frames),
-    Segmentation=dict(include_roi_centroids=False, mask_type="voxel", stub_test=stub_test, stub_frames=stub_frames),
+    Segmentation=dict(
+        include_roi_centroids=False,
+        include_roi_acceptance=False,
+        mask_type="voxel",
+        stub_test=stub_test,
+        stub_frames=stub_frames,
+    ),
 )
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
@@ -97,11 +103,11 @@ with h5py.File(name=processed_behavior_file_path) as file:
     frame_tracker = file["data"]["frame"][:]
 timestamps = np.where(np.diff(frame_tracker))[1][:-1] / behavior_rate
 
-# only for corrupted session
-imaging_len = converter.data_interface_objects["Imaging"].imaging_extractor.get_num_frames()
+if session_name == "20160113_4_1_cy14_7dpf_0gain_trial_20170113_171241":
+    imaging_timestamps = timestamps[8985:]  # all data prior to this is missing
 
 if "Imaging" in converter.data_interface_objects:
-    converter.data_interface_objects["Imaging"].imaging_extractor.set_times(times=timestamps[:imaging_len])
+    converter.data_interface_objects["Imaging"].imaging_extractor.set_times(times=imaging_timestamps)
 if "NeuronSegmentation" in converter.data_interface_objects:
     converter.data_interface_objects["NeuronSegmentation"].segmentation_extractor.set_times(times=timestamps)
 
@@ -111,12 +117,12 @@ metadata_from_yaml = load_dict_from_file(file_path=global_metadata_path)
 
 # Automatically remove excess metadata from dual-color form
 cell_type_id_to_pop = 1 if cell_type_id == 0 else 0
-metadata_from_yaml["Ophys"]["Fluorescence"]["roi_response_series"].pop(cell_type_id)
-metadata_from_yaml["Ophys"]["DfOverF"]["roi_response_series"].pop(cell_type_id)
-metadata_from_yaml["Ophys"]["ImageSegmentation"]["plane_segmentations"].pop(cell_type_id)
-metadata_from_yaml["Ophys"]["ImagingPlane"].pop(cell_type_id)
+metadata_from_yaml["Ophys"]["Fluorescence"]["roi_response_series"].pop(cell_type_id_to_pop)
+metadata_from_yaml["Ophys"]["DfOverF"]["roi_response_series"].pop(cell_type_id_to_pop)
+metadata_from_yaml["Ophys"]["ImageSegmentation"]["plane_segmentations"].pop(cell_type_id_to_pop)
+metadata_from_yaml["Ophys"]["ImagingPlane"].pop(cell_type_id_to_pop)
 
-metadata = dict_deep_update(metadata, metadata_from_yaml)
+metadata = dict_deep_update(metadata, metadata_from_yaml, append_list=False)
 
 converter.run_conversion(
     metadata=metadata, nwbfile_path=nwbfile_path, conversion_options=conversion_options, overwrite=True

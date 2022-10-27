@@ -21,6 +21,10 @@ Ophys:
   Device:
     - name: Microscope
       description: Confocal imaging was done using a Zeiss LSM 710, LSM 880 upright confocal, or a Zeiss LSM 800.
+  TwoPhotonSeries:
+    - name: RawTwoPhotonSeries
+      imaging_plane: NeuronVolumeSegmentation
+      unit: a.u.
   Fluorescence:
     name: Fluorescence
     roi_response_series:
@@ -46,7 +50,7 @@ Ophys:
       description: Whole-brain optical imaging for the neuron filter.
       device: Microscope
       indicator: GCaMP6f
-      excitation_lambda: 488
+      excitation_lambda: 488.0
       location: whole-brain
       reference_frame: dorsal
       optical_channel:
@@ -61,7 +65,7 @@ Ophys:
       # Some single-color glia subjects used the jRGECO1b indicator
       # For jRGECO1b indicator single-color, excitation is 561 nm
       # with a 630-692 nm filter
-      excitation_lambda: 561
+      excitation_lambda: 561.0
       location: whole-brain
       reference_frame: dorsal
       optical_channel:
