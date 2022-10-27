@@ -2,7 +2,7 @@
 from neuroconv.datainterfaces.ophys.basesegmentationextractorinterface import BaseSegmentationExtractorInterface
 from neuroconv.utils import FilePathType
 
-from .yu_mu_cell_2019_segmentation_extractor import YuMu2019SegmentationExtractor
+from ..extractors.yu_mu_cell_2019_segmentation_extractor import YuMu2019SegmentationExtractor
 
 
 class YuMu2019SegmentationInterface(BaseSegmentationExtractorInterface):
