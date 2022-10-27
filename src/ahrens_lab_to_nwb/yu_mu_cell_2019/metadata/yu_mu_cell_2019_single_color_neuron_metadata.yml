@@ -17,6 +17,7 @@ Ophys:
           # Really this is 525-550 nm, but required by schema to be a 'number', so returning midpoint
   TwoPhotonSeries:
     - name: RawTwoPhotonSeries
+      description: Full resolution of images from whole-brain calcium imaging.
       imaging_plane: NeuronVolume
       unit: a.u.
   ImageSegmentation:

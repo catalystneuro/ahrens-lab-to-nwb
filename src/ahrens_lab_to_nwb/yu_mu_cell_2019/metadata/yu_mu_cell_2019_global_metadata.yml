@@ -15,4 +15,5 @@ NWBFile:
     - Looger, Loren L.
     - Ahrens, Misha B.
 Subject:
+  description: Zebrafish in a virtual reality environment.
   species: Danio rerio
