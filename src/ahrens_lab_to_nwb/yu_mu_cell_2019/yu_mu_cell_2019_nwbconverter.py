@@ -17,6 +17,7 @@ class YuMuCell2019NWBConverter(NWBConverter):
 
     data_interface_classes = dict(
         Imaging=AhrensHdf5ImagingInterface,
+        Segmentation=YuMu2019SegmentationInterface,  # For single-color runs, no need to distinguish
         GliaSegmentation=YuMu2019SegmentationInterface,
         NeuronSegmentation=YuMu2019SegmentationInterface,
         RawBehavior=YuMu2019RawBehaviorInterface,

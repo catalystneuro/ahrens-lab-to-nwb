@@ -43,6 +43,6 @@ class YuMu2019ActivityStatesInterface(BaseDataInterface):
             name="ActivityStates", description="Classified periods of activity (passive, active, or transient)."
         )
         time_intervals.add_column(name="state_type", description="The type of classified state.")
-        for _, start_time, stop_time, state_type in table_dataframe.itertuples():
+        for start_time, stop_time, state_type in table_dataframe.itertuples(index=False):
             time_intervals.add_interval(start_time=start_time, stop_time=stop_time, state_type=state_type)
         behavior_module.add(time_intervals)
