@@ -3,6 +3,7 @@ from neuroconv import NWBConverter
 
 from . import (
     AhrensHdf5ImagingInterface,
+    AhrensDownsampledImagingInterface,
     YuMu2019SingleColorSegmentationInterface,
     # YuMu2019DualColorSegmentationInterface
     YuMu2019RawBehaviorInterface,
@@ -18,6 +19,7 @@ class YuMuCell2019NWBConverter(NWBConverter):
 
     data_interface_classes = dict(
         Imaging=AhrensHdf5ImagingInterface,
+        DownsampledImaging=AhrensDownsampledImagingInterface,
         SingleColorSegmentation=YuMu2019SingleColorSegmentationInterface,
         # DUalColorSegmentation=YuMu2019DualColorSegmentationInterface,
         RawBehavior=YuMu2019RawBehaviorInterface,

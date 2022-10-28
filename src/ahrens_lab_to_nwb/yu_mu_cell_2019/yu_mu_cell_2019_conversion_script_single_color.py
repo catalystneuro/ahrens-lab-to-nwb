@@ -13,7 +13,7 @@ from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuC
 
 # Manually specify everything here as it changes
 # ----------------------------------------------
-stub_test = False  # True for a fast prototype file, False for converting the entire session
+stub_test = True  # True for a fast prototype file, False for converting the entire session
 stub_frames = 4  # Length of stub file, if stub_test=True
 cell_type = "neuron"  # Either "neuron" or "glia"
 
@@ -31,6 +31,9 @@ ophys_metadata_path = metadata_folder / "yu_mu_cell_2019_single_color_neuron_met
 raw_behavior_series_description_file_path = metadata_folder / "yu_mu_cell_2019_behavior_descriptions.yml"
 
 imaging_folder_path = Path(f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/raw")
+downsampled_imaging_folder_path = Path(
+    f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/projections"
+)
 segmentation_file_path = Path(f"E:/Ahrens/Segmentation/{session_name}/Cells{cell_type_id}_clean.mat")
 
 # Some of these may not exist and that's OK (existence is checked before adding it to the conversion)
@@ -40,7 +43,7 @@ processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path("E:/Ahrens/NWB/full_single_color_imaging+neuron.nwb")
+nwbfile_path = Path("E:/Ahrens/NWB/stub_single_color_with_projections.nwb")
 # ----------------------------------------------
 # Below here is automated
 
@@ -62,6 +65,12 @@ source_data = dict(
         folder_path=str(imaging_folder_path),
         sampling_frequency=imaging_rate,
         shape=[29, 888, 2048],
+        dtype="int16",
+    ),
+    DownsampledImaging=dict(
+        folder_path=str(downsampled_imaging_folder_path),
+        sampling_frequency=imaging_rate,
+        shape=[8, 222, 512],
         dtype="int16",
     ),
     SingleColorSegmentation=dict(file_path=str(segmentation_file_path), sampling_frequency=imaging_rate),
@@ -100,13 +109,24 @@ conversion_options = dict(
             progress_bar_options=dict(desc="Converting imaging data...", position=0),
         ),
     ),
+    DownsampledImaging=dict(
+        two_photon_series_index=1,
+        stub_test=stub_test,
+        stub_frames=stub_frames,
+        iterator_options=dict(
+            buffer_gb=0.5,
+            chunk_shape=(1, 512, 222, 8),
+            display_progress=True,
+            progress_bar_options=dict(desc="Converting downsampled imaging data...", position=1),
+        ),
+    ),
     SingleColorSegmentation=dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
             buffer_gb=0.5,
             display_progress=True,
-            progress_bar_options=dict(desc="Converting segmentation data...", position=1),
+            progress_bar_options=dict(desc="Converting segmentation data...", position=2),
         ),
     ),
 )
@@ -121,9 +141,11 @@ timestamps = np.where(np.diff(frame_tracker))[1][:-1] / behavior_rate
 if session_name == "20160113_4_1_cy14_7dpf_0gain_trial_20170113_171241":
     imaging_timestamps = timestamps[8985:]  # all data prior to this is missing
 
-# For stub mode
+# For testing mode
 if "Imaging" in converter.data_interface_objects:
     converter.data_interface_objects["Imaging"].imaging_extractor.set_times(times=imaging_timestamps)
+if "DownsampledImaging" in converter.data_interface_objects:
+    converter.data_interface_objects["DownsampledImaging"].imaging_extractor.set_times(times=timestamps)
 if "SingleColorSegmentation" in converter.data_interface_objects:
     converter.data_interface_objects["SingleColorSegmentation"].segmentation_extractor.set_times(times=timestamps)
 

@@ -20,6 +20,12 @@ Ophys:
       description: Full resolution of images from whole-brain calcium imaging.
       imaging_plane: NeuronVolume
       unit: a.u.
+    - name: DownsampledTwoPhotonSeries
+      description: |
+        Downsampled resolution of images from whole-brain calcium imaging. Planes are downsampled by (2,2)
+        windows for a 4x smaller image. Nearly blank planes are removed and the rest are aggregated together.
+      imaging_plane: NeuronVolume
+      unit: a.u.
   ImageSegmentation:
     name: VolumeSegmentation
     plane_segmentations:
