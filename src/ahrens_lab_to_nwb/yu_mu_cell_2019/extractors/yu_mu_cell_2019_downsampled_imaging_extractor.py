@@ -45,7 +45,7 @@ class AhrensDownsampledImagingExtractor(ImagingExtractor):
         Thus, open fresh io in context each time something is needed.
         """
         with ScanImageTiffReader(str(self.file_path)) as io:
-            return io.data(beg=idx, end=idx + 1)
+            return io.data(beg=idx, end=idx + 1).transpose(self._frame_axis_order)
 
     def get_frames(self, frame_idxs: ArrayType, channel: int = 0) -> np.ndarray:
         squeeze_data = False
@@ -60,12 +60,11 @@ class AhrensDownsampledImagingExtractor(ImagingExtractor):
                 frames = io.data(beg=frame_idxs[0], end=frame_idxs[-1] + 1)
                 if squeeze_data:
                     frames = frames.squeeze()
-            return frames
+            return frames.transpose(self._frame_axis_order)
 
     def get_video(self, start_frame=None, end_frame=None, channel: Optional[int] = 0) -> np.ndarray:
-        print(str(self.file_path))
         with ScanImageTiffReader(filename=str(self.file_path)) as io:
-            return io.data(beg=start_frame, end=end_frame)
+            return io.data(beg=start_frame, end=end_frame).transpose(self._frame_axis_order)
 
     def get_image_size(self) -> Tuple[int, int, int]:
         if self.region is None:
