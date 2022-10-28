@@ -43,7 +43,7 @@ processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path("E:/Ahrens/NWB/stub_single_color_with_projections.nwb")
+nwbfile_path = Path("E:/Ahrens/NWB/{session_name}.nwb")
 # ----------------------------------------------
 # Below here is automated
 
