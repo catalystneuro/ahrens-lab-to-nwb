@@ -71,7 +71,10 @@ class YuMu2019SingleColorSegmentationInterface(BaseSegmentationExtractorInterfac
             name=metadata["Ophys"]["Fluorescence"]["roi_response_series"][0]["name"],
             description=metadata["Ophys"]["DfOverF"]["roi_response_series"][0]["description"],
             data=H5DataIO(
-                SliceableDataChunkIterator(segmentation_extractor.get_traces(name="raw"), **iterator_options),
+                SliceableDataChunkIterator(
+                    segmentation_extractor.get_traces_dict()["raw"],  # DO NOT USE get_traces() as that loads array
+                    **iterator_options,
+                ),
                 **compression_options,
             ),
             rois=roi_table_region,
@@ -87,7 +90,10 @@ class YuMu2019SingleColorSegmentationInterface(BaseSegmentationExtractorInterfac
             name=metadata["Ophys"]["DfOverF"]["roi_response_series"][0]["name"],
             description=metadata["Ophys"]["DfOverF"]["roi_response_series"][0]["description"],
             data=H5DataIO(
-                SliceableDataChunkIterator(segmentation_extractor.get_traces(name="dff"), **iterator_options),
+                SliceableDataChunkIterator(
+                    segmentation_extractor.get_traces_dict()["dff"],  # DO NOT USE get_traces() as that loads array
+                    **iterator_options,
+                ),
                 **compression_options,
             ),
             rois=roi_table_region,

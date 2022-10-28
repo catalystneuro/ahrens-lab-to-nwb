@@ -13,7 +13,7 @@ from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuC
 
 # Manually specify everything here as it changes
 # ----------------------------------------------
-stub_test = True  # True for a fast prototype file, False for converting the entire session
+stub_test = False  # True for a fast prototype file, False for converting the entire session
 stub_frames = 4  # Length of stub file, if stub_test=True
 cell_type = "neuron"  # Either "neuron" or "glia"
 
@@ -40,7 +40,7 @@ processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path("E:/Ahrens/NWB/testing_single_color_imaging+neuron.nwb")
+nwbfile_path = Path("E:/Ahrens/NWB/full_single_color_imaging+neuron.nwb")
 # ----------------------------------------------
 # Below here is automated
 
@@ -90,8 +90,25 @@ if processed_behavior_file_path.exists():
 
 
 conversion_options = dict(
-    Imaging=dict(stub_test=stub_test, stub_frames=stub_frames),
-    SingleColorSegmentation=dict(stub_test=stub_test, stub_frames=stub_frames),
+    Imaging=dict(
+        stub_test=stub_test,
+        stub_frames=stub_frames,
+        iterator_options=dict(
+            buffer_gb=0.5,
+            chunk_shape=(1, 2048, 888, 1),
+            display_progress=True,
+            progress_bar_options=dict(desc="Converting imaging data...", position=0),
+        ),
+    ),
+    SingleColorSegmentation=dict(
+        stub_test=stub_test,
+        stub_frames=stub_frames,
+        iterator_options=dict(
+            buffer_gb=0.5,
+            display_progress=True,
+            progress_bar_options=dict(desc="Converting segmentation data...", position=1),
+        ),
+    ),
 )
 
 converter = YuMuCell2019NWBConverter(source_data=source_data)
@@ -104,10 +121,11 @@ timestamps = np.where(np.diff(frame_tracker))[1][:-1] / behavior_rate
 if session_name == "20160113_4_1_cy14_7dpf_0gain_trial_20170113_171241":
     imaging_timestamps = timestamps[8985:]  # all data prior to this is missing
 
+# For stub mode
 if "Imaging" in converter.data_interface_objects:
     converter.data_interface_objects["Imaging"].imaging_extractor.set_times(times=imaging_timestamps)
-if "NeuronSegmentation" in converter.data_interface_objects:
-    converter.data_interface_objects["NeuronSegmentation"].segmentation_extractor.set_times(times=timestamps)
+if "SingleColorSegmentation" in converter.data_interface_objects:
+    converter.data_interface_objects["SingleColorSegmentation"].segmentation_extractor.set_times(times=timestamps)
 
 metadata = converter.get_metadata()
 metadata["NWBFile"].update(session_start_time=session_start_time)
