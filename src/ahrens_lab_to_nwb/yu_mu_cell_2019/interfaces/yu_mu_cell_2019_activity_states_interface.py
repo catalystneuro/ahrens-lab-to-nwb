@@ -19,7 +19,9 @@ class YuMu2019ActivityStatesInterface(BaseDataInterface):
         self.verbose = verbose
 
     def run_conversion(self, nwbfile: NWBFile, metadata: Optional[dict] = None):
-        behavior_module = get_module(nwbfile=nwbfile, name="behavior", description="TODO")
+        behavior_module = get_module(
+            nwbfile=nwbfile, name="behavior", description="Contains processed behavioral data."
+        )
 
         table_dict = dict(start_time=list(), stop_time=list(), state_type=list())
         for channel_name in ["ch1", "ch2"]:
