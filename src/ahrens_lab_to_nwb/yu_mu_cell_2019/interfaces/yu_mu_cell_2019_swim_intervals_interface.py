@@ -18,7 +18,9 @@ class YuMu2019SwimIntervalsInterface(BaseDataInterface):
         self.verbose = verbose
 
     def run_conversion(self, nwbfile: NWBFile, metadata: Optional[dict] = None):
-        behavior_module = get_module(nwbfile=nwbfile, name="behavior", description="TODO")
+        behavior_module = get_module(
+            nwbfile=nwbfile, name="behavior", description="Contains processed behavioral data."
+        )
 
         with h5py.File(name=self.source_data["file_path"]) as source_file:
 
