@@ -78,8 +78,9 @@ class YuMu2019SegmentationExtractor(SegmentationExtractor):
         # ...approximately 120MB total, so fine to load all into memory.
         # Actual sparse usage will be much smaller than that, too.
         for roi in roi_ids:
-            zero_idxs = np.where(self._file[self._pixel_mask_name_map["x"]][:, roi] == 0)
-            num_pixels = zero_idxs[0][0] if np.any(zero_idxs) else self._file["x"].shape[0]
+            roi_selection = self._file[self._pixel_mask_name_map["x"]][:, roi]
+            nonzero_idxs = np.where(np.logical_and(roi_selection != 0, ~np.isnan(roi_selection)))
+            num_pixels = len(nonzero_idxs[0]) if np.any(nonzero_idxs) else 0
             pixel_mask = np.empty(shape=(num_pixels, 4), dtype=dtype)
             pixel_mask[:, 0] = self._file[self._pixel_mask_name_map["x"]][:num_pixels, roi]
             pixel_mask[:, 1] = self._file[self._pixel_mask_name_map["y"]][:num_pixels, roi]

@@ -38,7 +38,7 @@ class YuMu2019ActivityStatesInterface(BaseDataInterface):
                     table_dict["state_type"].extend([state_name] * len(source_file[group_name]["start"][0][0][0]))
 
         table_dataframe = pd.DataFrame(data=table_dict)
-        table_dataframe.sort_values(by=["start_time"])
+        table_dataframe = table_dataframe.sort_values(by=["start_time"])
 
         time_intervals = TimeIntervals(
             name="ActivityStates", description="Classified periods of activity (passive, active, or transient)."
