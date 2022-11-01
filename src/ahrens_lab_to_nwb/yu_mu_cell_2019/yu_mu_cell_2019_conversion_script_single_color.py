@@ -18,7 +18,7 @@ stub_frames = 4  # Length of stub file, if stub_test=True
 cell_type = "neuron"  # Either "neuron" or "glia"
 
 timezone = "US/Eastern"
-session_name = "20160113_4_1_cy14_7dpf_0gain_trial_20170113_171241"
+session_name = "20160113_3_1_cy14_7dpf_0gain_trial_20170113_150834"
 
 cell_type_id = 0 if cell_type == "neuron" else 1
 session_name_split = session_name.split("_")
@@ -30,17 +30,17 @@ global_metadata_path = metadata_folder / "yu_mu_cell_2019_global_metadata.yml"
 ophys_metadata_path = metadata_folder / "yu_mu_cell_2019_single_color_neuron_metadata.yml"
 raw_behavior_series_description_file_path = metadata_folder / "yu_mu_cell_2019_behavior_descriptions.yml"
 
-imaging_folder_path = Path(f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/raw")
-segmentation_file_path = Path(f"E:/Ahrens/Segmentation/{session_name}/Cells{cell_type_id}_clean.mat")
+imaging_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_name}/raw")
+segmentation_file_path = Path(f"/home/jovyan/ahrens/segmentation/{session_name}/Cells{cell_type_id}_clean.mat")
 
 # Some of these may not exist and that's OK (existence is checked before adding it to the conversion)
-ephys_folder_path = Path(f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/ephys")
+ephys_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_name}/ephys")
 raw_behavior_file_path = ephys_folder_path / "rawdata.mat"
 processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path("E:/Ahrens/NWB/full_single_color_imaging+neuron.nwb")
+nwbfile_path = Path(f"/home/jovyan/ahrens/nwb/{session_name}.nwb")
 # ----------------------------------------------
 # Below here is automated
 
@@ -106,7 +106,7 @@ conversion_options = dict(
         iterator_options=dict(
             buffer_gb=0.5,
             display_progress=True,
-            progress_bar_options=dict(desc="Converting segmentation data...", position=1),
+            progress_bar_options=dict(desc="Converting segmentation data...", position=2),
         ),
     ),
 )
@@ -120,8 +120,13 @@ timestamps = np.where(np.diff(frame_tracker))[1][:-1] / behavior_rate
 
 if session_name == "20160113_4_1_cy14_7dpf_0gain_trial_20170113_171241":
     imaging_timestamps = timestamps[8985:]  # all data prior to this is missing
+if session_name == "20160113_2_1_cy14_7dpf_0gain_trial_20170113_124907":
+    imaging_timestamps = timestamps[:7616]  # odd mismatch between ephys frame tracker and everything else
+    timestamps = imaging_timestamps
+else:
+    imaging_timestamps = timestamps
 
-# For stub mode
+# For testing mode
 if "Imaging" in converter.data_interface_objects:
     converter.data_interface_objects["Imaging"].imaging_extractor.set_times(times=imaging_timestamps)
 if "SingleColorSegmentation" in converter.data_interface_objects:
