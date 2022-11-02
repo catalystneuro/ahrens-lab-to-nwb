@@ -36,7 +36,7 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
         else:
             self._num_stacks, self._num_rows, self._num_cols = shape
             self._dtype = dtype
-        self._frame_axis_order = [1, 2, 0]
+        self._frame_axis_order = [2, 1, 0]
 
     def get_video(self, start_frame: Optional[int] = None, end_frame: Optional[int] = None) -> np.ndarray:
         with h5py.File(name=self.file_path) as file:
@@ -54,10 +54,8 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
     def get_image_size(self) -> Tuple[int, int, int]:
         if self.region is None:
             image_size = (self._num_rows, self._num_cols, self._num_stacks)
-        elif self.region == "top":
-            image_size = (int(self._num_rows / 2), self._num_cols, self._num_stacks)
-        elif self.region == "bottom":
-            image_size = (int(self._num_rows / 2), self._num_cols, self._num_stacks)
+        elif self.region in ["top", "bottom"]:
+            image_size = (self._num_rows, int(self._num_cols / 2), self._num_stacks)
         return image_size
 
     def get_num_frames(self):

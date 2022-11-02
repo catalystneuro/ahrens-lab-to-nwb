@@ -40,7 +40,7 @@ processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path("E:/Ahrens/NWB/testing_dual_color.nwb")
+nwbfile_path = Path("E:/Ahrens/NWB/testing_dual_color_4.nwb")
 # ----------------------------------------------
 # Below here is automated
 
@@ -97,7 +97,8 @@ conversion_options = dict(
         stub_frames=stub_frames,
         iterator_options=dict(
             buffer_gb=0.5,
-            chunk_shape=(1, 2048, 1024, 1),
+            chunk_shape=(1, 1024, 2048, 1),
+            # chunk_shape=(1, 2048, 1024, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting neuron imaging data...", position=0),
         ),
@@ -109,7 +110,8 @@ conversion_options = dict(
         stub_frames=stub_frames,
         iterator_options=dict(
             buffer_gb=0.5,
-            chunk_shape=(1, 2048, 1024, 1),
+            chunk_shape=(1, 1024, 2048, 1),
+            # chunk_shape=(1, 2048, 1024, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting glia imaging data...", position=1),
         ),
