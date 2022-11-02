@@ -1,0 +1,60 @@
+Ophys:
+  Device:
+    - name: Microscope
+      description: Confocal imaging was done using LSM 710, LSM 880 upright, or LSM 800.
+      manufacturer: ZEISS
+  ImagingPlane:
+    - name: NeuronVolume
+      description: Whole-brain optical imaging for the neuron filter.
+      device: Microscope
+      indicator: GCaMP6f
+      excitation_lambda: 488.0
+      location: whole-brain
+      reference_frame: dorsal
+      optical_channel:
+        - name: NeuronOpticalChannel
+          description: Detection filter (Semrock).
+          emission_lambda: 537.5
+          # Really this is 525-550 nm, but required by schema to be a 'number', so returning midpoint
+    - name: GliaVolume
+      description: Whole-brain optical imaging for the glia filter.
+      device: Microscope
+      indicator: GCaMP6f
+      excitation_lambda: 561.0
+      location: whole-brain
+      reference_frame: dorsal
+      optical_channel:
+        - name: GliaOpticalChannel
+          description: Detection filter (Chroma).
+          emission_lambda: 660.0
+          # Really this is 645-675 nm, but required by schema to be a 'number', so returning midpoint
+  TwoPhotonSeries:
+    - name: NeuronTwoPhotonSeries
+      description: Full resolution images from neuron-specific optical channel of whole-brain calcium imaging.
+      imaging_plane: NeuronVolume
+      unit: a.u.
+    - name: GliaTwoPhotonSeries
+      description: Full resolution images from glia-specific optical channel of whole-brain calcium imaging.
+      imaging_plane: GliaVolume
+      unit: a.u.
+  ImageSegmentation:
+    name: VolumeSegmentation
+    plane_segmentations:
+      - name: NeuronVolumeSegmentation
+        description: Segmented ROIs for the neurons.
+      - name: GliaVolumeSegmentation
+        description: Segmented ROIs for the glia.
+  Fluorescence:
+    name: Fluorescence
+    roi_response_series:
+      - name: NeuronFluorescence
+        description: Segmented regions of interest (ROIs) and baseline activity for the neuron indicator type.
+      - name: GliaFluorescence
+        description: Segmented regions of interest (ROIs) and baseline activity for the glia indicator type.
+  DfOverF:
+    name: DfOverF
+    roi_response_series:
+      - name: NeuronDfOverF
+        description: Segmented regions of interest (ROIs) and detrended activity for the neuron indicator type.
+      - name: GliaDfOverF
+        description: Segmented regions of interest (ROIs) and detrended activity for the glia indicator type.

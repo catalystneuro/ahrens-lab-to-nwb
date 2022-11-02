@@ -8,7 +8,7 @@ import h5py
 
 from neuroconv.utils import load_dict_from_file, dict_deep_update
 
-from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuCell2019NWBConverter
+from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuCell2019SingleColorNWBConverter
 
 
 # Manually specify everything here as it changes
@@ -111,7 +111,7 @@ conversion_options = dict(
     ),
 )
 
-converter = YuMuCell2019NWBConverter(source_data=source_data)
+converter = YuMuCell2019SingleColorNWBConverter(source_data=source_data)
 
 # Add synchronized timestamps to all imaging and segmentation objects
 with h5py.File(name=processed_behavior_file_path) as file:

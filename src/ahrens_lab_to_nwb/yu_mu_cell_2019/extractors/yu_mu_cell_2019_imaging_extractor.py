@@ -47,9 +47,9 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
             elif self.region == "top":
                 region_slice = slice(int(self._num_rows / 2), None)
             elif self.region == "bottom":
-                region_slice = slice(None, slice(int(self._num_rows / 2), None))
+                region_slice = slice(None, int(self._num_rows / 2))
 
-            return video.lazy_slice[region_slice, :, :].dsetread()[np.newaxis, :]
+            return video.lazy_slice[:, region_slice, :].dsetread()[np.newaxis, :]
 
     def get_image_size(self) -> Tuple[int, int, int]:
         if self.region is None:
