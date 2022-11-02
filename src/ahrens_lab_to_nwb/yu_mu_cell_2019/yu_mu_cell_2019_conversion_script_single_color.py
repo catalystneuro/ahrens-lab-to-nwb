@@ -94,7 +94,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=5,
             chunk_shape=(1, 2048, 888, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting imaging data...", position=0),
@@ -104,7 +104,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=5,
             display_progress=True,
             progress_bar_options=dict(desc="Converting segmentation data...", position=2),
         ),
