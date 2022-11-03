@@ -95,7 +95,7 @@ conversion_options = dict(
         stub_frames=stub_frames,
         iterator_options=dict(
             buffer_gb=5,
-            chunk_shape=(1, 2048, 888, 1),
+            chunk_shape=(1, 888, 2048, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting imaging data...", position=0),
         ),

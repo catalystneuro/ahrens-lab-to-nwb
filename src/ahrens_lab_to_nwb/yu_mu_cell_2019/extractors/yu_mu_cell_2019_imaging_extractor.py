@@ -53,9 +53,9 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
 
     def get_image_size(self) -> Tuple[int, int, int]:
         if self.region is None:
-            image_size = (self._num_cols, self._num_rows, self._num_stacks)
+            image_size = (self._num_rows, self._num_cols, self._num_stacks)
         elif self.region in ["top", "bottom"]:
-            image_size = (int(self._num_cols / 2), self._num_rows, self._num_stacks)
+            image_size = (self._num_rows, int(self._num_cols / 2), self._num_stacks)
         return image_size
 
     def get_num_frames(self):

@@ -53,7 +53,7 @@ class YuMu2019SingleColorSegmentationInterface(BaseSegmentationExtractorInterfac
             name=metadata["Ophys"]["ImageSegmentation"]["plane_segmentations"][0]["name"],
             description=metadata["Ophys"]["ImageSegmentation"]["plane_segmentations"][0]["description"],
             imaging_plane=nwbfile.imaging_planes["NeuronVolume"],
-            reference_images=nwbfile.acquisition["RawTwoPhotonSeries"],
+            reference_images=nwbfile.acquisition["TwoPhotonSeries"],
         )
 
         for roi in segmentation_extractor.get_roi_ids():
