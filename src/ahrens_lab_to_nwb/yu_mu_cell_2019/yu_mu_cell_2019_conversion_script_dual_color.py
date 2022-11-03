@@ -13,7 +13,7 @@ from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuC
 
 # Manually specify everything here as it changes
 # ----------------------------------------------
-stub_test = True  # True for a fast prototype file, False for converting the entire session
+stub_test = False  # True for a fast prototype file, False for converting the entire session
 stub_frames = 4  # Length of stub file, if stub_test=True
 
 timezone = "US/Eastern"
@@ -40,7 +40,7 @@ processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path("E:/Ahrens/NWB/testing_dual_color_4.nwb")
+nwbfile_path = Path(f"E:/Ahrens/NWB/{session_name}.nwb")
 # ----------------------------------------------
 # Below here is automated
 
@@ -98,7 +98,6 @@ conversion_options = dict(
         iterator_options=dict(
             buffer_gb=0.5,
             chunk_shape=(1, 1024, 2048, 1),
-            # chunk_shape=(1, 2048, 1024, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting neuron imaging data...", position=0),
         ),
@@ -111,7 +110,6 @@ conversion_options = dict(
         iterator_options=dict(
             buffer_gb=0.5,
             chunk_shape=(1, 1024, 2048, 1),
-            # chunk_shape=(1, 2048, 1024, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting glia imaging data...", position=1),
         ),

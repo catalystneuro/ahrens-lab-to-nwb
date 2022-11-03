@@ -31,10 +31,10 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
 
         if shape is None or dtype is None:
             with h5py.File(name=file_path) as file:
-                self._num_stacks, self._num_rows, self._num_cols = file["default"].shape
+                self._num_stacks, self._num_cols, self._num_rows = file["default"].shape
                 self._dtype = file["default"].dtype
         else:
-            self._num_stacks, self._num_rows, self._num_cols = shape
+            self._num_stacks, self._num_cols, self._num_rows = shape
             self._dtype = dtype
         self._frame_axis_order = [2, 1, 0]
 
@@ -45,17 +45,17 @@ class AhrensHdf5ImagingExtractor(ImagingExtractor):
             if self.region is None:
                 region_slice = slice(None)
             elif self.region == "top":
-                region_slice = slice(int(self._num_rows / 2), None)
+                region_slice = slice(int(self._num_cols / 2), None)
             elif self.region == "bottom":
-                region_slice = slice(None, int(self._num_rows / 2))
+                region_slice = slice(None, int(self._num_cols / 2))
 
             return video.lazy_slice[:, region_slice, :].dsetread()[np.newaxis, :]
 
     def get_image_size(self) -> Tuple[int, int, int]:
         if self.region is None:
-            image_size = (self._num_rows, self._num_cols, self._num_stacks)
+            image_size = (self._num_cols, self._num_rows, self._num_stacks)
         elif self.region in ["top", "bottom"]:
-            image_size = (self._num_rows, int(self._num_cols / 2), self._num_stacks)
+            image_size = (int(self._num_cols / 2), self._num_rows, self._num_stacks)
         return image_size
 
     def get_num_frames(self):
