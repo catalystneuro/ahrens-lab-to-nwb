@@ -28,19 +28,19 @@ global_metadata_path = metadata_folder / "yu_mu_cell_2019_global_metadata.yml"
 ophys_metadata_path = metadata_folder / "yu_mu_cell_2019_dual_color_neuron_metadata.yml"
 raw_behavior_series_description_file_path = metadata_folder / "yu_mu_cell_2019_behavior_descriptions.yml"
 
-imaging_folder_path = Path(f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/raw")
+imaging_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_start_date}/fish{subject_number}/{session_name}/raw")
 
 # These are the manually re-saved files to correct the half-precision issue
-neuron_segmentation_file_path = Path(f"E:/Ahrens/Segmentation/{session_name}/cells1_adjusted.mat")
-glia_segmentation_file_path = Path(f"E:/Ahrens/Segmentation/{session_name}/cells0_adjusted.mat")
+neuron_segmentation_file_path = Path(f"/home/jovyan/ahrens/segmentation/{session_name}/cells1_adjusted.mat")
+glia_segmentation_file_path = Path(f"/home/jovyan/ahrens/segmentation/{session_name}/cells0_adjusted.mat")
 
-ephys_folder_path = Path(f"E:/Ahrens/Imaging/{session_start_date}/fish{subject_number}/{session_name}/ephys")
+ephys_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_start_date}/fish{subject_number}/{session_name}/ephys")
 raw_behavior_file_path = ephys_folder_path / "rawdata.mat"
 processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
 states_folder_path = ephys_folder_path
 
-nwbfile_path = Path(f"E:/Ahrens/NWB/{session_name}.nwb")
+nwbfile_path = Path(f"/home/jovyan/ahrens/nwb/{session_name}.nwb")
 # ----------------------------------------------
 # Below here is automated
 
