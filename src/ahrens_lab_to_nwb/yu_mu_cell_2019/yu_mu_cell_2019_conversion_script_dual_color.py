@@ -13,11 +13,12 @@ from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuC
 
 # Manually specify everything here as it changes
 # ----------------------------------------------
-stub_test = False  # True for a fast prototype file, False for converting the entire session
+stub_test = True  # True for a fast prototype file, False for converting the entire session
 stub_frames = 4  # Length of stub file, if stub_test=True
 
 timezone = "US/Eastern"
-session_name = "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002"
+session_name = "20161109_2_1_6dpf_GFAP_GC_Huc_RG_GA_CL_fb_OL_f0_0GAIN_20161109_211950"
+dual_color_session_description = "A dual-color optic channel recording of both neuron and glia populations."
 
 session_name_split = session_name.split("_")
 subject_number = session_name_split[1]
@@ -28,13 +29,13 @@ global_metadata_path = metadata_folder / "yu_mu_cell_2019_global_metadata.yml"
 ophys_metadata_path = metadata_folder / "yu_mu_cell_2019_dual_color_neuron_metadata.yml"
 raw_behavior_series_description_file_path = metadata_folder / "yu_mu_cell_2019_behavior_descriptions.yml"
 
-imaging_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_start_date}/fish{subject_number}/{session_name}/raw")
+imaging_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_name}/raw")
 
 # These are the manually re-saved files to correct the half-precision issue
 neuron_segmentation_file_path = Path(f"/home/jovyan/ahrens/segmentation/{session_name}/cells1_adjusted.mat")
 glia_segmentation_file_path = Path(f"/home/jovyan/ahrens/segmentation/{session_name}/cells0_adjusted.mat")
 
-ephys_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_start_date}/fish{subject_number}/{session_name}/ephys")
+ephys_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_name}/ephys")
 raw_behavior_file_path = ephys_folder_path / "rawdata.mat"
 processed_behavior_file_path = ephys_folder_path / "data.mat"
 trial_table_file_path = ephys_folder_path / "trial_info.mat"
@@ -63,14 +64,14 @@ source_data = dict(
     NeuronImaging=dict(
         folder_path=str(imaging_folder_path),
         sampling_frequency=imaging_rate,
-        region="bottom",
+        region="top",
         shape=[29, 2048, 2048],
         dtype="int16",
     ),
     GliaImaging=dict(
         folder_path=str(imaging_folder_path),
         sampling_frequency=imaging_rate,
-        region="top",
+        region="bottom",
         shape=[29, 2048, 2048],
         dtype="int16",
     ),
@@ -145,7 +146,7 @@ if "DualColorSegmentation" in converter.data_interface_objects:
     converter.data_interface_objects["DualColorSegmentation"].glia_segmentation_extractor.set_times(times=timestamps)
 
 metadata = converter.get_metadata()
-metadata["NWBFile"].update(session_start_time=session_start_time)
+metadata["NWBFile"].update(session_start_time=session_start_time, session_description=dual_color_session_description)
 
 # Update global metadata
 global_metadata_from_yaml = load_dict_from_file(file_path=global_metadata_path)
