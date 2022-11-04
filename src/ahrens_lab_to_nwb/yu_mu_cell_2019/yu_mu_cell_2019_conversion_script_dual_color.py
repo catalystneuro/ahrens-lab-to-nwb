@@ -85,11 +85,25 @@ source_data = dict(
         metadata_file_path=str(raw_behavior_series_description_file_path),
         sampling_frequency=behavior_rate,
     ),
-    ProcessedBehavior=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
-    Trials=dict(file_path=str(trial_table_file_path), sampling_frequency=behavior_rate),
-    SwimIntervals=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
     ActivityStates=dict(folder_path=str(states_folder_path), sampling_frequency=behavior_rate),
 )
+if trial_table_file_path.exists():
+    source_data.update(
+        Trials=dict(file_path=str(trial_table_file_path), sampling_frequency=behavior_rate),
+    )
+if processed_behavior_file_path.exists():
+    source_data.update(
+        ProcessedBehavior=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
+    )
+if trial_table_file_path.exists():
+    source_data.update(
+        Trials=dict(file_path=str(trial_table_file_path), sampling_frequency=behavior_rate),
+    )
+if processed_behavior_file_path.exists():
+    source_data.update(
+        SwimIntervals=dict(file_path=str(processed_behavior_file_path), sampling_frequency=behavior_rate),
+    )
+
 conversion_options = dict(
     NeuronImaging=dict(
         imaging_plane_index=0,

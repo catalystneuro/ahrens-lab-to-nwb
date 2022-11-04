@@ -19,6 +19,7 @@ cell_type = "neuron"  # Either "neuron" or "glia"
 
 timezone = "US/Eastern"
 session_name = "20160113_4_1_cy14_7dpf_0gain_trial_20170113_171241"
+single_color_session_description = "A single-color optic channel recording of either a neuron or a glia population."
 
 cell_type_id = 0 if cell_type == "neuron" else 1
 session_name_split = session_name.split("_")
@@ -128,7 +129,7 @@ if "SingleColorSegmentation" in converter.data_interface_objects:
     converter.data_interface_objects["SingleColorSegmentation"].segmentation_extractor.set_times(times=timestamps)
 
 metadata = converter.get_metadata()
-metadata["NWBFile"].update(session_start_time=session_start_time)
+metadata["NWBFile"].update(session_start_time=session_start_time, session_description=single_color_session_description)
 
 # Update global metadata
 global_metadata_from_yaml = load_dict_from_file(file_path=global_metadata_path)
