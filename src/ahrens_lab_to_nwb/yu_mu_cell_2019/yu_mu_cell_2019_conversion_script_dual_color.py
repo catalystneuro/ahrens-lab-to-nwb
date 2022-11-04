@@ -18,6 +18,7 @@ stub_frames = 4  # Length of stub file, if stub_test=True
 
 timezone = "US/Eastern"
 session_name = "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002"
+dual_color_session_description = "A dual-color optic channel recording of both neuron and glia populations."
 
 session_name_split = session_name.split("_")
 subject_number = session_name_split[1]
@@ -63,14 +64,14 @@ source_data = dict(
     NeuronImaging=dict(
         folder_path=str(imaging_folder_path),
         sampling_frequency=imaging_rate,
-        region="bottom",
+        region="top",
         shape=[29, 2048, 2048],
         dtype="int16",
     ),
     GliaImaging=dict(
         folder_path=str(imaging_folder_path),
         sampling_frequency=imaging_rate,
-        region="top",
+        region="bottom",
         shape=[29, 2048, 2048],
         dtype="int16",
     ),
@@ -145,7 +146,7 @@ if "DualColorSegmentation" in converter.data_interface_objects:
     converter.data_interface_objects["DualColorSegmentation"].glia_segmentation_extractor.set_times(times=timestamps)
 
 metadata = converter.get_metadata()
-metadata["NWBFile"].update(session_start_time=session_start_time)
+metadata["NWBFile"].update(session_start_time=session_start_time, session_description=dual_color_session_description)
 
 # Update global metadata
 global_metadata_from_yaml = load_dict_from_file(file_path=global_metadata_path)
