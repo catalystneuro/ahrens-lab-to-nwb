@@ -17,7 +17,7 @@ stub_test = True  # True for a fast prototype file, False for converting the ent
 stub_frames = 4  # Length of stub file, if stub_test=True
 
 timezone = "US/Eastern"
-session_name = "20161109_2_1_6dpf_GFAP_GC_Huc_RG_GA_CL_fb_OL_f0_0GAIN_20161109_211950"
+session_name = "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002"
 dual_color_session_description = "A dual-color optic channel recording of both neuron and glia populations."
 
 session_name_split = session_name.split("_")
