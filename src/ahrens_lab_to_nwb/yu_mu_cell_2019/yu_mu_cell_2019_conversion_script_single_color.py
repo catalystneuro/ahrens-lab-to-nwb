@@ -13,12 +13,12 @@ from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuC
 
 # Manually specify everything here as it changes
 # ----------------------------------------------
-stub_test = False  # True for a fast prototype file, False for converting the entire session
+stub_test = True  # True for a fast prototype file, False for converting the entire session
 stub_frames = 4  # Length of stub file, if stub_test=True
 cell_type = "neuron"  # Either "neuron" or "glia"
 
 timezone = "US/Eastern"
-session_name = "20160113_3_1_cy14_7dpf_0gain_trial_20170113_150834"
+session_name = "20170127_1_1_cy14_7dpf_0vel_0gain_gainmodulation_20170127_111652"
 single_color_session_description = "A single-color optic channel recording of either a neuron or a glia population."
 
 cell_type_id = 0 if cell_type == "neuron" else 1
@@ -124,9 +124,18 @@ if session_name == "20160113_4_1_cy14_7dpf_0gain_trial_20170113_171241":
 if session_name == "20160113_2_1_cy14_7dpf_0gain_trial_20170113_124907":
     imaging_timestamps = timestamps[:7616]  # odd mismatch between ephys frame tracker and everything else
     timestamps = imaging_timestamps
+if session_name == "20170127_1_1_cy14_7dpf_0vel_0gain_gainmodulation_20170127_111652":
+    imaging_timestamps = timestamps
+    imaging = converter.data_interface_objects["Imaging"].imaging_extractor
+    converter.data_interface_objects["Imaging"].imaging_extractor = imaging.frame_slice(
+        start_frame=0, end_frame=len(timestamps)
+    )  # odd mismatch between ephys frame tracker and everything else
 else:
     imaging_timestamps = timestamps
 
+print(len(timestamps))
+print(converter.data_interface_objects["Imaging"].imaging_extractor.get_num_frames())
+    
 # For testing mode
 if "Imaging" in converter.data_interface_objects:
     converter.data_interface_objects["Imaging"].imaging_extractor.set_times(times=imaging_timestamps)

@@ -13,7 +13,7 @@ from ahrens_lab_to_nwb.yu_mu_cell_2019.yu_mu_cell_2019_nwbconverter import YuMuC
 
 # Manually specify everything here as it changes
 # ----------------------------------------------
-stub_test = True  # True for a fast prototype file, False for converting the entire session
+stub_test = False  # True for a fast prototype file, False for converting the entire session
 stub_frames = 4  # Length of stub file, if stub_test=True
 
 timezone = "US/Eastern"
@@ -44,7 +44,11 @@ states_folder_path = ephys_folder_path
 nwbfile_path = Path(f"/home/jovyan/ahrens/nwb/{session_name}.nwb")
 # ----------------------------------------------
 # Below here is automated
-
+num_planes_map = {
+    "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002": 29,
+    "20161109_2_1_6dpf_GFAP_GC_Huc_RG_GA_CL_fb_OL_f0_0GAIN_20161109_211950": 24,
+}
+num_planes = num_planes_map[session_name]
 
 example_session_id = imaging_folder_path.parent.stem
 session_start_time_string = "".join(example_session_id.split("_")[-2:])
@@ -65,14 +69,14 @@ source_data = dict(
         folder_path=str(imaging_folder_path),
         sampling_frequency=imaging_rate,
         region="top",
-        shape=[29, 2048, 2048],
+        shape=[num_planes, 2048, 2048],
         dtype="int16",
     ),
     GliaImaging=dict(
         folder_path=str(imaging_folder_path),
         sampling_frequency=imaging_rate,
         region="bottom",
-        shape=[29, 2048, 2048],
+        shape=[num_planes, 2048, 2048],
         dtype="int16",
     ),
     DualColorSegmentation=dict(
@@ -111,7 +115,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=4,
             chunk_shape=(1, 1024, 2048, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting neuron imaging data...", position=0),
@@ -123,7 +127,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=4,
             chunk_shape=(1, 1024, 2048, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting glia imaging data...", position=1),
@@ -133,7 +137,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=4,
             display_progress=True,
             progress_bar_options=dict(desc="Converting segmentation data...", position=2),
         ),
@@ -147,14 +151,17 @@ with h5py.File(name=processed_behavior_file_path) as file:
     frame_tracker = file["data"]["frame"][:]
 timestamps = np.where(np.diff(frame_tracker))[1][:-1] / behavior_rate
 
-# only for corrupted session
-imaging_len = converter.data_interface_objects["NeuronImaging"].imaging_extractor.get_num_frames()
+if session_name == "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002":
+    imaging_len = converter.data_interface_objects["NeuronImaging"].imaging_extractor.get_num_frames()
+    imaging_timestamps = timestamps[:imaging_len]
+else:
+    imaging_timestamps = timestamps
 
 # If statements here are mostly for testing purposes, the entire conversion would include all
 if "NeuronImaging" in converter.data_interface_objects:
-    converter.data_interface_objects["NeuronImaging"].imaging_extractor.set_times(times=timestamps[:imaging_len])
+    converter.data_interface_objects["NeuronImaging"].imaging_extractor.set_times(times=imaging_timestamps)
 if "GliaImaging" in converter.data_interface_objects:
-    converter.data_interface_objects["GliaImaging"].imaging_extractor.set_times(times=timestamps[:imaging_len])
+    converter.data_interface_objects["GliaImaging"].imaging_extractor.set_times(times=imaging_timestamps)
 if "DualColorSegmentation" in converter.data_interface_objects:
     converter.data_interface_objects["DualColorSegmentation"].neuron_segmentation_extractor.set_times(times=timestamps)
     converter.data_interface_objects["DualColorSegmentation"].glia_segmentation_extractor.set_times(times=timestamps)

@@ -17,7 +17,7 @@ stub_test = True  # True for a fast prototype file, False for converting the ent
 stub_frames = 4  # Length of stub file, if stub_test=True
 
 timezone = "US/Eastern"
-session_name = "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002"
+session_name = "20170228_3_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_165730"
 dual_color_session_description = "A dual-color optic channel recording of both neuron and glia populations."
 
 session_name_split = session_name.split("_")
@@ -111,7 +111,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=5.0,
             chunk_shape=(1, 1024, 2048, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting neuron imaging data...", position=0),
@@ -123,7 +123,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=5.0,
             chunk_shape=(1, 1024, 2048, 1),
             display_progress=True,
             progress_bar_options=dict(desc="Converting glia imaging data...", position=1),
@@ -133,7 +133,7 @@ conversion_options = dict(
         stub_test=stub_test,
         stub_frames=stub_frames,
         iterator_options=dict(
-            buffer_gb=0.5,
+            buffer_gb=5.0,
             display_progress=True,
             progress_bar_options=dict(desc="Converting segmentation data...", position=2),
         ),
@@ -147,14 +147,17 @@ with h5py.File(name=processed_behavior_file_path) as file:
     frame_tracker = file["data"]["frame"][:]
 timestamps = np.where(np.diff(frame_tracker))[1][:-1] / behavior_rate
 
-# only for corrupted session
-imaging_len = converter.data_interface_objects["NeuronImaging"].imaging_extractor.get_num_frames()
+if session_name == "20170228_4_1_gfaprgeco_hucgc_6dpf_shorttrials_20170228_185002":
+    imaging_len = converter.data_interface_objects["NeuronImaging"].imaging_extractor.get_num_frames()
+    imaging_timestamps = timestamps[:imaging_len]
+else:
+    imaging_timestamps = timestamps
 
 # If statements here are mostly for testing purposes, the entire conversion would include all
 if "NeuronImaging" in converter.data_interface_objects:
-    converter.data_interface_objects["NeuronImaging"].imaging_extractor.set_times(times=timestamps[:imaging_len])
+    converter.data_interface_objects["NeuronImaging"].imaging_extractor.set_times(times=imaging_timestamps)
 if "GliaImaging" in converter.data_interface_objects:
-    converter.data_interface_objects["GliaImaging"].imaging_extractor.set_times(times=timestamps[:imaging_len])
+    converter.data_interface_objects["GliaImaging"].imaging_extractor.set_times(times=imaging_timestamps)
 if "DualColorSegmentation" in converter.data_interface_objects:
     converter.data_interface_objects["DualColorSegmentation"].neuron_segmentation_extractor.set_times(times=timestamps)
     converter.data_interface_objects["DualColorSegmentation"].glia_segmentation_extractor.set_times(times=timestamps)
