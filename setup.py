@@ -14,7 +14,7 @@ with open("README.md", "r") as file:
 
 setup(
     name="ahrens-lab-to-nwb",
-    version="0.0.2",
+    version="1.0.0",
     description="NWB conversion scripts, functions, and classes for an the Ahrens lab.",
     long_description=long_description,
     long_description_content_type="text/markdown",
