@@ -71,3 +71,8 @@ You can run a specific conversion with the following command:
 ```
 python src/ahrens_lab_to_nwb/yu_mu_cell_2019/yu_mu_cell_2019_conversion_script.py
 ```
+
+
+## Viewing the NWB files on DANDI
+
+This is very easy through the [DANDI Hub platform](https://hub.dandiarchive.org/) - simply follow the instructions inside the [Interactive Notebook Tutorial](https://github.com/catalystneuro/ahrens-lab-to-nwb/blob/main/view_files_on_dandi.ipynb)
