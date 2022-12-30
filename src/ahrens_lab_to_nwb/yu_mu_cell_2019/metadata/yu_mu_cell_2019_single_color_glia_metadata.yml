@@ -4,7 +4,7 @@ Ophys:
       description: Confocal imaging was done using a Zeiss LSM 710, LSM 880 upright confocal, or a Zeiss LSM 800.
   ImagingPlane:
     - name: GliaVolume
-      description: Whole-brain optical imaging for the neuron filter.
+      description: Whole-brain optical imaging.
       device: Microscope
       indicator: GCaMP6f
       excitation_lambda: 488.0
@@ -29,9 +29,9 @@ Ophys:
     name: Fluorescence
     roi_response_series:
       - name: GliaFluorescence
-        description: Segmented regions of interest (ROIs) and baseline activity for the neuron indicator type.
+        description: Segmented regions of interest (ROIs) and their baseline activity.
   DfOverF:
     name: DfOverF
     roi_response_series:
       - name: GliaDfOverF
-        description: Segmented regions of interest (ROIs) and detrended activity for the neuron indicator type.
+        description: Segmented regions of interest (ROIs) and their detrended activity.
