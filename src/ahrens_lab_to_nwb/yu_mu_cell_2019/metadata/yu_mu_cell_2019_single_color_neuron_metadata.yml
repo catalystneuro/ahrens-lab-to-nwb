@@ -16,7 +16,7 @@ Ophys:
           emission_lambda: 537.5
           # Really this is 525-550 nm, but required by schema to be a 'number', so returning midpoint
   TwoPhotonSeries:
-    - name: TwoPhotonSeries
+    - name: NeuronOnePhotonSeries
       description: Full resolution of images from whole-brain calcium imaging.
       imaging_plane: NeuronVolume
       unit: a.u.
