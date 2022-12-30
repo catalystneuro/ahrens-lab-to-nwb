@@ -19,7 +19,7 @@ Ophys:
     - name: GliaVolume
       description: Whole-brain optical imaging for the glia filter.
       device: Microscope
-      indicator: GCaMP6f
+      indicator: jRGECO1b
       excitation_lambda: 561.0
       location: whole-brain
       reference_frame: dorsal
