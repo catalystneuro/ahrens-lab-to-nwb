@@ -28,7 +28,7 @@ session_start_date = session_name_split[-2]
 
 metadata_folder = Path(__file__).parent / "metadata"  # The pre-built one in the repository; can also use a local copy
 global_metadata_path = metadata_folder / "yu_mu_cell_2019_global_metadata.yml"
-ophys_metadata_path = metadata_folder / "yu_mu_cell_2019_single_color_neuron_metadata.yml"
+ophys_metadata_path = metadata_folder / f"yu_mu_cell_2019_single_color_{cell_type}_metadata.yml"
 raw_behavior_series_description_file_path = metadata_folder / "yu_mu_cell_2019_behavior_descriptions.yml"
 
 imaging_folder_path = Path(f"/home/jovyan/ahrens/imaging/{session_name}/raw")
