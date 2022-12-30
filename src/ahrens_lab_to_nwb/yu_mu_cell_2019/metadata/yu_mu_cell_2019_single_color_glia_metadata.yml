@@ -3,7 +3,7 @@ Ophys:
     - name: Microscope
       description: Confocal imaging was done using a Zeiss LSM 710, LSM 880 upright confocal, or a Zeiss LSM 800.
   ImagingPlane:
-    - name: NeuronVolume
+    - name: GliaVolume
       description: Whole-brain optical imaging for the neuron filter.
       device: Microscope
       indicator: GCaMP6f
@@ -11,27 +11,27 @@ Ophys:
       location: whole-brain
       reference_frame: dorsal
       optical_channel:
-        - name: NeuronOpticalChannel
+        - name: GliaOpticalChannel
           description: Detection filter (Semrock).
           emission_lambda: 537.5
           # Really this is 525-550 nm, but required by schema to be a 'number', so returning midpoint
   TwoPhotonSeries:
-    - name: NeuronOnePhotonSeries
+    - name: GliaOnePhotonSeries
       description: Full resolution of images from whole-brain calcium imaging.
-      imaging_plane: NeuronVolume
+      imaging_plane: GliaVolume
       unit: a.u.
   ImageSegmentation:
     name: VolumeSegmentation
     plane_segmentations:
-      - name: NeuronVolumeSegmentation
+      - name: GliaVolumeSegmentation
         description: Segmented ROIs for the neural cells.
   Fluorescence:
     name: Fluorescence
     roi_response_series:
-      - name: NeuronFluorescence
+      - name: GliaFluorescence
         description: Segmented regions of interest (ROIs) and baseline activity for the neuron indicator type.
   DfOverF:
     name: DfOverF
     roi_response_series:
-      - name: NeuronDfOverF
+      - name: GliaDfOverF
         description: Segmented regions of interest (ROIs) and detrended activity for the neuron indicator type.
