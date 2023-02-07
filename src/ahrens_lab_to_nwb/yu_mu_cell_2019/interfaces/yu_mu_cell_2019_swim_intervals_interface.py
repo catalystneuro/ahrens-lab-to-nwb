@@ -23,7 +23,6 @@ class YuMu2019SwimIntervalsInterface(BaseDataInterface):
         )
 
         with h5py.File(name=self.source_data["file_path"]) as source_file:
-
             # Swimming intervals
             swim_starts = source_file["data"]["swimStartIndT"][0, :] / self.source_data["sampling_frequency"]
             swim_stops = source_file["data"]["swimEndIndT"][0, :] / self.source_data["sampling_frequency"]
