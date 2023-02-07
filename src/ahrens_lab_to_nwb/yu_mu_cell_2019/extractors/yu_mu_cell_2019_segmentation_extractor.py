@@ -37,7 +37,10 @@ class YuMu2019SegmentationExtractor(SegmentationExtractor):
             self._image_shape = (888, 2048, 29)
 
         baseline_shape = self._file[self._baseline_group_name].shape
-        assert baseline_shape != (1, 6,), (  # The MATLAB half-precision coding stores the dataset as a (1,6) object
+        assert baseline_shape != (
+            1,
+            6,
+        ), (  # The MATLAB half-precision coding stores the dataset as a (1,6) object
             "The flourescence series in this file are saved in half precision - file cannot be read in Python! "
             "Please recast the MATLAB datatype and save a new file."
         )
